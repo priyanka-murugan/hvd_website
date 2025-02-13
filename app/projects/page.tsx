@@ -6,9 +6,13 @@ import { Card } from "../components/card";
 import { Article } from "./article";
 import { Redis } from "@upstash/redis";
 import { Eye } from "lucide-react";
+import dynamic from "next/dynamic"; // ✅ Dynamic import for Map
 
 const redis = Redis.fromEnv();
 export const revalidate = 60;
+
+// ✅ Load Map Component Dynamically
+const MapComponent = dynamic(() => import("../components/MapComponent"), { ssr: false });
 
 /* ✅ Server-Side Timer Calculation */
 const getElapsedTime = () => {
@@ -46,12 +50,22 @@ export default async function ProjectsPage() {
       <div className="px-6 pt-20 mx-auto max-w-7xl lg:px-8 md:pt-24 lg:pt-32">
         <div className="max-w-2xl mx-auto lg:mx-0">
           <h2 className="text-3xl font-bold tracking-tight text-zinc-100 sm:text-4xl">
-            Gifts
+            The Memories We Made So Far
           </h2>
           <p className="mt-4 text-zinc-400">
             I made these projects because they are meaningful to us in some way.
           </p>
         </div>
+
+        {/* ✅ Map Section */}
+        <div className="w-full mt-8">
+          {/* <h3 className="text-xl font-bold text-zinc-100 mb-4 text-center">
+            Our Favorite Places Together 🌍
+          </h3> */}
+          <p className="text-2xl tracking-tight text-zinc-100 sm:text-2xl mt-8 text-center">We've shared some amazing moments together—ate yummy food at so many different restaurants (while also cooking at home :P), sipping coffee in your favorite cafés, and exploring new places. Every memory we've made is a part of our story, and I wanted to see it all come together. So here it is—a map of everywhere we've been, and every adventure we've shared.</p>
+          <MapComponent />
+        </div>
+
 
         {/* ✅ Space & Line after "Gifts" (Preserved as requested) */}
         <div className="w-full h-px bg-zinc-800 my-6" />

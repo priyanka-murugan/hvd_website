@@ -1,11 +1,18 @@
 import { withContentlayer } from "next-contentlayer";
+import mdx from "@next/mdx";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
-	experimental: {
-		mdxRs: true,
-	},
+  pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"], // ✅ Ensuring MDX support
+  experimental: {
+    mdxRs: true,
+  },
 };
 
-export default withContentlayer(nextConfig);
+// ✅ Apply MDX support
+const withMDX = mdx({
+  extension: /\.mdx?$/,
+});
+
+// ✅ Correctly compose `withMDX` and `withContentlayer`
+export default withContentlayer(withMDX(nextConfig));
