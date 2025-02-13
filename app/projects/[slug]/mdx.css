@@ -43,3 +43,51 @@
    height: 800px;
    border: 3px solid black;
 }
+#metrics {
+  width: 20%; /* Same width as header for consistency */
+  margin-top: 10px;
+}
+
+#metrics p {
+  background-color: #e9ecef; /* Slightly darker gray for metrics boxes */
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+}
+
+/* Map container styling */
+#map-container {
+  position: relative; /* Allows positioning elements inside it (like dropdown) */
+  width: 60%; /* Map width matches header and metrics */
+  height: 500px; /* Fixed height for the map */
+  margin-top: 20px;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px; /* Rounded corners for map container */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow around map */
+}
+
+/* Dropdown filter styling (top-left of map) */
+#category-filter {
+  position: absolute; /* Position relative to #map-container */
+  top: 10px; /* Distance from top of map container */
+  right: 10px; /* Distance from left of map container */
+  z-index: 1000; /* Ensure it appears above the map */
+  padding: 5px;
+  border-radius: 4px;
+  background-color: white; /* White background for dropdown */
+  border: solid 1px #ddd; /* Light border for dropdown */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for aesthetics */
+}
+
+.custom-icon {
+  font-size: 24px;
+  line-height: 1;
+  text-align: center;
+  background: none; /* Remove white background from icons */
+  border: none;     /* Remove border from icons */
+}
