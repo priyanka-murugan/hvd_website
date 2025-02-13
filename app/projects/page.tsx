@@ -8,50 +8,75 @@ import { Redis } from "@upstash/redis";
 import { Eye } from "lucide-react";
 
 const redis = Redis.fromEnv();
-
 export const revalidate = 60;
+
+/* ✅ Server-Side Timer Calculation */
+const getElapsedTime = () => {
+  const startDate = new Date("December 14, 2024 19:00:00").getTime();
+  const now = Date.now();
+  const diff = now - startDate;
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  return { days, hours, minutes, seconds };
+};
+
 export default async function ProjectsPage() {
-  const views = (
-    await redis.mget<number[]>(
-      ...allProjects.map((p) => ["pageviews", "projects", p.slug].join(":")),
-    )
-  ).reduce((acc, v, i) => {
-    acc[allProjects[i].slug] = v ?? 0;
+  const keys = allProjects.map((p) => `pageviews:projects:${p.slug}`);
+  const values = await redis.mget<number[]>(...keys);
+
+  const views = allProjects.reduce((acc, project, i) => {
+    acc[project.slug] = values?.[i] ?? 0;
     return acc;
   }, {} as Record<string, number>);
 
-  const featured = allProjects.find((project) => project.slug === "iconic-dates")!;
-  const top2 = allProjects.find((project) => project.slug === "crossword")!;
-  const top3 = allProjects.find((project) => project.slug === "letter-wall")!;
-  const sorted = allProjects
-    .filter((p) => p.published)
-    .filter(
-      (project) =>
-        project.slug !== featured.slug &&
-        project.slug !== top2.slug &&
-        project.slug !== top3.slug,
-    )
-    .sort(
-      (a, b) =>
-        new Date(b.date ?? Number.POSITIVE_INFINITY).getTime() -
-        new Date(a.date ?? Number.POSITIVE_INFINITY).getTime(),
-    );
+  const featured = allProjects.find((p) => p.slug === "iconic-dates")!;
+  const top2 = allProjects.find((p) => p.slug === "crossword")!;
+  const top3 = allProjects.find((p) => p.slug === "letter-wall")!;
+
+  // ✅ Get elapsed time at build time
+  const elapsedTime = getElapsedTime();
 
   return (
     <div className="relative pb-16">
       <Navigation />
-      <div className="px-6 pt-20 mx-auto space-y-8 max-w-7xl lg:px-8 md:space-y-16 md:pt-24 lg:pt-32">
+      <div className="px-6 pt-20 mx-auto max-w-7xl lg:px-8 md:pt-24 lg:pt-32">
         <div className="max-w-2xl mx-auto lg:mx-0">
           <h2 className="text-3xl font-bold tracking-tight text-zinc-100 sm:text-4xl">
             Gifts
           </h2>
           <p className="mt-4 text-zinc-400">
-            I made these projects because they are meaningful to us in some way. 
+            I made these projects because they are meaningful to us in some way.
           </p>
         </div>
-        <div className="w-full h-px bg-zinc-800" />
 
-        <div className="grid grid-cols-1 gap-8 mx-auto lg:grid-cols-2 ">
+        {/* ✅ Space & Line after "Gifts" (Preserved as requested) */}
+        <div className="w-full h-px bg-zinc-800 my-6" />
+
+        {/* ✅ Timer Component (Rendered on Server) */}
+        <Card>
+          <div className="p-4 md:p-8 text-center">
+            <h3 className="text-xl font-bold text-zinc-100 mb-4">
+              Time Since We Met, And So Many More To Go ❤️ 
+            </h3>
+            <div className="grid grid-cols-4 gap-4 text-center text-white">
+              {Object.entries(elapsedTime).map(([unit, value]) => (
+                <div key={unit} className="flex flex-col items-center">
+                  <span className="text-4xl font-bold">
+                    {value.toString().padStart(2, "0")}
+                  </span>
+                  <span className="text-sm uppercase text-zinc-500">{unit}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Card>
+
+        {/* ✅ Featured Project */}
+        <div className="grid grid-cols-1 gap-8 mx-auto lg:grid-cols-2 mt-8">
           <Card>
             <Link href={`/projects/${featured.slug}`}>
               <article className="relative w-full h-full p-4 md:p-8">
@@ -84,16 +109,12 @@ export default async function ProjectsPage() {
                 <p className="mt-4 leading-8 duration-150 text-zinc-400 group-hover:text-zinc-300">
                   {featured.description}
                 </p>
-                <div className="absolute bottom-4 md:bottom-8">
-                  <p className="hidden text-zinc-200 hover:text-zinc-50 lg:block">
-                     <span aria-hidden="true">&rarr;</span>
-                  </p>
-                </div>
               </article>
             </Link>
           </Card>
 
-          <div className="flex flex-col w-full gap-8 mx-auto border-t border-gray-900/10 lg:mx-0 lg:border-t-0 ">
+          {/* ✅ Top 2 Projects */}
+          <div className="flex flex-col w-full gap-8 mx-auto">
             {[top2, top3].map((project) => (
               <Card key={project.slug}>
                 <Article project={project} views={views[project.slug] ?? 0} />
@@ -101,36 +122,22 @@ export default async function ProjectsPage() {
             ))}
           </div>
         </div>
-        <div className="hidden w-full h-px md:block bg-zinc-800" />
 
-        <div className="grid grid-cols-1 gap-4 mx-auto lg:mx-0 md:grid-cols-3">
-          <div className="grid grid-cols-1 gap-4">
-            {sorted
-              .filter((_, i) => i % 3 === 0)
-              .map((project) => (
-                <Card key={project.slug}>
-                  <Article project={project} views={views[project.slug] ?? 0} />
-                </Card>
-              ))}
-          </div>
-          <div className="grid grid-cols-1 gap-4">
-            {sorted
-              .filter((_, i) => i % 3 === 1)
-              .map((project) => (
-                <Card key={project.slug}>
-                  <Article project={project} views={views[project.slug] ?? 0} />
-                </Card>
-              ))}
-          </div>
-          <div className="grid grid-cols-1 gap-4">
-            {sorted
-              .filter((_, i) => i % 3 === 2)
-              .map((project) => (
-                <Card key={project.slug}>
-                  <Article project={project} views={views[project.slug] ?? 0} />
-                </Card>
-              ))}
-          </div>
+        {/* ✅ Spotify Playlist Embed */}
+        <p className="text-2xl font-bold tracking-tight text-zinc-100 sm:text-2xl mt-8 text-center">
+          Here's the playlist you made for me in the very first week :P
+        </p>
+        <div className="w-full flex justify-center mt-4">
+          <iframe
+            style={{ borderRadius: "12px" }}
+            src="https://open.spotify.com/embed/playlist/0uS5a1D6yNm3ih2tabus68?utm_source=generator"
+            width="100%"
+            height="352"
+            frameBorder="0"
+            allowFullScreen
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+          />
         </div>
       </div>
     </div>
