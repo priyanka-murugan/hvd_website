@@ -30,3 +30,16 @@
   [data-rehype-pretty-code-title] + pre {
     @apply mt-0;
   }
+
+.crossword-container {
+   width: 100%; /* Changed to full width */
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   position: relative;
+}
+.crossword-iframe {
+   width: 800px;
+   height: 800px;
+   border: 3px solid black;
+}

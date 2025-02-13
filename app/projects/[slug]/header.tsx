@@ -18,18 +18,18 @@ export const Header: React.FC<Props> = ({ project, views }) => {
 	const [isIntersecting, setIntersecting] = useState(true);
 
 	const links: { label: string; href: string }[] = [];
-	if (project.repository) {
-		links.push({
-			label: "GitHub",
-			href: `https://github.com/${project.repository}`,
-		});
-	}
-	if (project.url) {
-		links.push({
-			label: "Website",
-			href: project.url,
-		});
-	}
+	// if (project.repository) {
+	// 	links.push({
+	// 		label: "GitHub",
+	// 		href: `https://github.com/${project.repository}`,
+	// 	});
+	// }
+	// if (project.url) {
+	// 	links.push({
+	// 		label: "Website",
+	// 		href: project.url,
+	// 	});
+	// }
 	useEffect(() => {
 		if (!ref.current) return;
 		const observer = new IntersectionObserver(([entry]) =>
@@ -67,7 +67,7 @@ export const Header: React.FC<Props> = ({ project, views }) => {
 								views,
 							)}
 						</span>
-						<Link target="_blank" href="https://twitter.com/chronark_">
+						{/* <Link target="_blank" href="https://twitter.com/chronark_">
 							<Twitter
 								className={`w-6 h-6 duration-200 hover:font-medium ${
 									isIntersecting
@@ -84,7 +84,7 @@ export const Header: React.FC<Props> = ({ project, views }) => {
 										: "text-zinc-600 hover:text-zinc-900"
 								} `}
 							/>
-						</Link>
+						</Link> */}
 					</div>
 
 					<Link
