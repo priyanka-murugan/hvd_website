@@ -35,7 +35,7 @@ export default function Home() {
       />
 
       {/* Main Heading with Glow Effect */}
-      <h1 className="py-3.5 px-1 z-10 text-4xl sm:text-5xl md:text-7xl text-transparent duration-1000 bg-white cursor-default text-edge-outline animate-title font-display bg-clip-text whitespace-nowrap glow">
+      <h1 className="py-3.5 px-1 z-10 text-4xl sm:text-4xl md:text-6xl text-transparent duration-1000 bg-white cursor-default text-edge-outline animate-title font-display bg-clip-text whitespace-nowrap glow">
         Happy Valentine's Day, Vishaal! ❤️
       </h1>
 
