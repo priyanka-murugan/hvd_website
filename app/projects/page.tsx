@@ -37,9 +37,9 @@ export default async function ProjectsPage() {
     return acc;
   }, {} as Record<string, number>);
 
-  const featured = allProjects.find((p) => p.slug === "iconic-dates")!;
-  const top2 = allProjects.find((p) => p.slug === "crossword")!;
-  const top3 = allProjects.find((p) => p.slug === "letter-wall")!;
+  const featured = allProjects.find((p) => p.slug === "crossword")!;
+  const top2 = allProjects.find((p) => p.slug === "letter-wall")!;
+  // const top3 = allProjects.find((p) => p.slug === "iconic-dates")!;
 
   // ✅ Get elapsed time at build time
   const elapsedTime = getElapsedTime();
@@ -62,7 +62,7 @@ export default async function ProjectsPage() {
           {/* <h3 className="text-xl font-bold text-zinc-100 mb-4 text-center">
             Our Favorite Places Together 🌍
           </h3> */}
-          <p className="text-2xl tracking-tight text-zinc-100 sm:text-2xl mt-8 text-center">We've shared some amazing moments together—ate yummy food at so many different restaurants (while also cooking at home :P), sipping coffee in your favorite cafés, and exploring new places. Every memory we've made is a part of our story, and I wanted to see it all come together. So here it is—a map of everywhere we've been, and every adventure we've shared.</p>
+          <p className="text-xl tracking-tight text-zinc-100 sm:text-xl mt-8 text-center">We've shared some amazing moments together—ate yummy food at so many different restaurants (while also cooking at home :P), sipping coffee in your favorite cafés, and exploring new places. Every memory we've made is a part of our story, and I wanted to see it all come together. So here it is—a map of everywhere we've been, and every adventure we've shared.</p>
           <MapComponent />
         </div>
 
@@ -126,15 +126,50 @@ export default async function ProjectsPage() {
               </article>
             </Link>
           </Card>
+          <Card>
+            <Link href={`/projects/${top2.slug}`}>
+              <article className="relative w-full h-full p-4 md:p-8">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="text-xs text-zinc-100">
+                    {top2.date ? (
+                      <time dateTime={new Date(top2.date).toISOString()}>
+                        {Intl.DateTimeFormat(undefined, {
+                          dateStyle: "medium",
+                        }).format(new Date(top2.date))}
+                      </time>
+                    ) : (
+                      <span>SOON</span>
+                    )}
+                  </div>
+                  <span className="flex items-center gap-1 text-xs text-zinc-500">
+                    <Eye className="w-4 h-4" />{" "}
+                    {Intl.NumberFormat("en-US", { notation: "compact" }).format(
+                      views[top2.slug] ?? 0,
+                    )}
+                  </span>
+                </div>
 
-          {/* ✅ Top 2 Projects */}
+                <h2
+                  id="featured-post"
+                  className="mt-4 text-3xl font-bold text-zinc-100 group-hover:text-white sm:text-4xl font-display"
+                >
+                  {top2.title}
+                </h2>
+                <p className="mt-4 leading-8 duration-150 text-zinc-400 group-hover:text-zinc-300">
+                  {top2.description}
+                </p>
+              </article>
+            </Link>
+          </Card>
+
+          {/* ✅ Top 2 Projects
           <div className="flex flex-col w-full gap-8 mx-auto">
-            {[top2, top3].map((project) => (
+            {[top2].map((project) => (
               <Card key={project.slug}>
                 <Article project={project} views={views[project.slug] ?? 0} />
               </Card>
             ))}
-          </div>
+          </div> */}
         </div>
 
         {/* ✅ Spotify Playlist Embed */}

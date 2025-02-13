@@ -81,7 +81,7 @@ const MapComponent = () => {
     <div className="mt-8">
       {/* ✅ Metrics Display */}
       <div className="bg-gray-900 p-4 rounded-lg text-white text-center mb-4">
-        <h3 className="text-xl font-bold mb-2">Everything we've explored! 🏆</h3>
+        <h3 className="text-xl font-bold mb-2">Our Journey On The Map 🏆</h3>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {Object.entries(metrics).map(([category, count]) => (
             <p key={category} className="text-lg">
