@@ -9,6 +9,8 @@ import { Eye } from "lucide-react";
 import dynamic from "next/dynamic"; // ✅ Dynamic import for Map
 
 const redis = Redis.fromEnv();
+
+export const dynamic = 'force-dynamic';
 export const revalidate = 60;
 
 // ✅ Load Map Component Dynamically
