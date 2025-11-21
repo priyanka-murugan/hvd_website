@@ -6,10 +6,8 @@ import { Card } from "../components/card";
 import { Article } from "./article";
 import { Redis } from "@upstash/redis";
 import { Eye } from "lucide-react";
-import dynamic from "next/dynamic"; // ✅ Dynamic import for Map
-
+import dynamicImport from "next/dynamic"; 
 const redis = Redis.fromEnv();
-
 export const dynamic = 'force-dynamic';
 export const revalidate = 60;
 
