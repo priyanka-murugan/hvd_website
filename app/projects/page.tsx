@@ -12,7 +12,7 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 60;
 
 // ✅ Load Map Component Dynamically
-const MapComponent = dynamic(() => import("../components/MapComponent"), { ssr: false });
+const MapComponent = dynamicImport(() => import("../components/MapComponent"), { ssr: false });
 
 /* ✅ Server-Side Timer Calculation */
 const getElapsedTime = () => {
