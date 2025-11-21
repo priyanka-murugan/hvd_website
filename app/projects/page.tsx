@@ -6,13 +6,12 @@ import { Card } from "../components/card";
 import { Article } from "./article";
 import { Redis } from "@upstash/redis";
 import { Eye } from "lucide-react";
-import dynamicImport from "next/dynamic"; 
+import dynamic from "next/dynamic"; 
 const redis = Redis.fromEnv();
-export const dynamic = 'force-dynamic';
 export const revalidate = 60;
 
 // ✅ Load Map Component Dynamically
-const MapComponent = dynamicImport(() => import("../components/MapComponent"), { ssr: false });
+const MapComponent = dynamic(() => import("../components/MapComponent"), { ssr: false });
 
 /* ✅ Server-Side Timer Calculation */
 const getElapsedTime = () => {
