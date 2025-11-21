@@ -2,6 +2,8 @@ import Link from "next/link";
 import React from "react";
 import Particles from "./components/particles";
 
+export const dynamic = 'force-dynamic';
+
 const navigation = [
   { name: "Click me! 😙", href: "/projects" },
 ];
